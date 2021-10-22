@@ -5,7 +5,12 @@ import RNPickerSelect from 'react-native-picker-select';
 import TextInput from '../../../../../components/TextInput';
 
 const styles = StyleSheet.create({
-  center: {},
+  center: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
   modalView: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -39,7 +44,7 @@ const EditPet = ({ route, navigation }: any) => {
   const [description, setDescription] = useState<string[]>(pet.description);
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.center}>
       <View style={styles.modalView}>
         <TextInput
           label="Name"
@@ -71,7 +76,7 @@ const EditPet = ({ route, navigation }: any) => {
           label="Age"
           keyboardType="numeric"
           maxLength={3}
-          value={age?.toString()}
+          value={age == 0 ? undefined : age!.toString()}
           onChangeText={(value) => setAge(+value)}
         />
         <TextInput
@@ -80,9 +85,10 @@ const EditPet = ({ route, navigation }: any) => {
           numberOfLines={7}
           value={(() => {
             let desString = '';
-            for (let paragraph of description) {
-              desString = desString + paragraph + '\n';
+            for (let i = 0; i < description.length - 1; i++) {
+              desString = `${desString + description[i]}\n`;
             }
+            desString = desString + description[description.length - 1];
             return desString;
           })()}
           onChangeText={(value) => setDescription(value.split(/\r?\n/))}
